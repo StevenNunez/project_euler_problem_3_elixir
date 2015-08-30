@@ -6,9 +6,14 @@ defmodule Factor do
       num
       |> square_root
       |> valid_prime_factor_range
-      |> Enum.filter_map(&evenly_divisible?(num, &1),
-                        (&factor_from_divider(&1, num)))
+      |> derive_factors(num)
     end
+  end
+
+  defp derive_factors(collection, target) do
+    collection
+    |> Enum.filter_map(&evenly_divisible?(target, &1),
+                        (&factor_from_divider(&1, target)))
   end
 
   defp evenly_divisible?(numerator, denominator) do
