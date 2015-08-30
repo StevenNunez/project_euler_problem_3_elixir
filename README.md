@@ -1,4 +1,5 @@
 Problem_3
 =========
 
-** TODO: Add description **
+Run `mix test` to run the test suite.
+
