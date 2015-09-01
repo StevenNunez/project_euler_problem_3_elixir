@@ -21,11 +21,11 @@ defmodule Factor do
   end
 
   defp factor_from_divider(divider, num) do
-    [divider, round(num/divider)]
+    [divider, trunc(num/divider)]
   end
 
   defp square_root(num) do
-    :math.sqrt(num) |> round
+    :math.sqrt(num) |> trunc
   end
 
   defp valid_prime_factor_range(max) do
@@ -39,7 +39,20 @@ defmodule Factor do
   end
 
   def max_prime(num) do
-    prime_for(num)
-    |> Enum.max
+    prime_for(num) |> Enum.sort |> List.last
+  end
+
+  def max_primes(range) do
+    range
+    |> remove_primes
+    |> Enum.map(&Task.async(fn ->
+      [&1, max_prime(&1)]
+    end))
+    |> Enum.map(&Task.await(&1))
+  end
+
+  defp remove_primes(collection) do
+    collection
+    |> Enum.reject(&Prime.is_prime?(&1))
   end
 end
